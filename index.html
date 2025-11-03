@@ -107,10 +107,11 @@
           <img src="assets/cholesterol.png" alt="Treatment Efficacy Model" class="card-image">
           <div class="card__info"><h3>Treatment Efficacy Model</h3></div>
         </a>
-        <a class="card tilt" href="templates/projects/project-2.html">
-          <img src="assets/smartdialer.png" alt="SmartDialer for IVR" class="card-image">
-          <div class="card__info"><h3>SmartDialer for IVR</h3></div>
+        <a class="card tilt" href="templates/projects/project-7.html">
+          <img src="assets/grid-logo.png" alt="OCR-Oncology documents" class="card-image">
+          <div class="card__info"><h3>OCR-Oncology documents</h3></div>
         </a>
+        
         <a class="card tilt" href="templates/projects/project-3.html">
           <img src="assets/hpi.png" alt="History of Previous Illness" class="card-image">
           <div class="card__info"><h3>History of Previous Illness</h3></div>
@@ -123,9 +124,9 @@
           <img src="assets/interview-bot.png" alt="HR-Screening Interviews" class="card-image">
           <div class="card__info"><h3>HR-Screening Interviews</h3></div>
         </a>
-        <a class="card tilt" href="templates/projects/project-7.html">
-          <img src="assets/grid-logo.png" alt="OCR-Oncology documents" class="card-image">
-          <div class="card__info"><h3>OCR-Oncology documents</h3></div>
+        <a class="card tilt" href="templates/projects/project-2.html">
+          <img src="assets/smartdialer.png" alt="SmartDialer for IVR" class="card-image">
+          <div class="card__info"><h3>SmartDialer for IVR</h3></div>
         </a>
       </div>
     </section>
@@ -202,21 +203,45 @@
       }
     }
 
+    function setActiveNav(name){
+      // remove 'active' from all navbar links (including Home)
+      document.querySelectorAll('.nav__links a').forEach(a => a.classList.remove('active'));
+      // add it to the nav item that controls this tab
+      const target = document.querySelector(`.nav__links a[data-tab="${name}"]`);
+      if (target) target.classList.add('active');
+    }
+
+
     // Buttons
     document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+      btn.addEventListener('click', () => {
+        activateTab(btn.dataset.tab);
+        setActiveNav(btn.dataset.tab);
+      });
     });
 
-    // Navbar links
+    // Navbar links (same page)
     document.querySelectorAll('.nav__links a[data-tab]').forEach(a => {
       a.addEventListener('click', (e) => {
         e.preventDefault();
         activateTab(a.dataset.tab);
+        setActiveNav(a.dataset.tab);
       });
     });
 
+
     // Year
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+    // Open the right tab when arriving with ?tab=ai or ?tab=embedded
+    (() => {
+      const params = new URLSearchParams(location.search);
+      const startTab = params.get('tab');
+      if (startTab === 'ai' || startTab === 'embedded') {
+        activateTab(startTab);
+        setActiveNav(startTab);
+      }
+    })();
+
 
     // Start closed (only tabs visible). To auto-open AI on load, uncomment:
     // activateTab('ai');
